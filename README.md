@@ -44,7 +44,7 @@ PageView & Animations for fluid transitions
 
 **Clone the repository:**
 
-- git clone https://github.com/your-repo/oru-phones-flutter.git
+- git clone https://github.com/hammad-16/ORUphones-Assignment/tree/assignment
 
 **Navigate to the project folder:**
 
