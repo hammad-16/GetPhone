@@ -2,7 +2,7 @@ ORU Phones - A Flutter Implementation
 
 📱 Overview
 
-This is a functional implementation of the ORU Phones project, developed using Flutter. The application showcases a sleek and intuitive UI, seamlessly integrating various APIs for a smooth and efficient user experience. Designed with performance and usability in mind, this project demonstrates robust state management and automated banner handling with dynamic scrolling.
+**This is a functional implementation of the ORU Phones project, developed using Flutter. The application showcases a sleek and intuitive UI, seamlessly integrating various APIs for a smooth and efficient user experience. Designed with performance and usability in mind, this project demonstrates robust state management and automated banner handling with dynamic scrolling.**
 
 ✨ Features
 
@@ -32,11 +32,11 @@ This is a functional implementation of the ORU Phones project, developed using F
 
 🛠️ Tech Stack
 
-Flutter & Dart  (For cross-platform development)
+**Flutter & Dart  (For cross-platform development)**
 
-Provider (State Management)
+**Provider (State Management)**
 
-REST API Integration 🌍
+**REST API Integration 🌍**
 
 PageView & Animations for fluid transitions
 
