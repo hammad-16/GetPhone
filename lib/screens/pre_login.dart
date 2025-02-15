@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oru/utils/routes.dart';
+import 'package:oru/widgets/navigation_grid.dart';
 
 class PreLogin extends StatefulWidget {
   const PreLogin({super.key});
@@ -40,13 +41,8 @@ class _PreLoginState extends State<PreLogin> {
           const SizedBox(height: 10,),
           ElevatedButton(
           onPressed: () {
-            try{
+
               Navigator.pushNamed(context, AppRoutes.login);
-            }
-            catch(e)
-            {
-              print(e);
-            }
 
           },
           style: ElevatedButton.styleFrom(
@@ -67,7 +63,7 @@ class _PreLoginState extends State<PreLogin> {
     ),
           const SizedBox(height: 10,),
           ElevatedButton(
-            onPressed: () {// Add your action here
+            onPressed: () {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFF6C018), // Button color
@@ -86,7 +82,8 @@ class _PreLoginState extends State<PreLogin> {
               ),
             ),
           ),
-
+          const SizedBox(height:250),
+          const NavigationGrid()
         ],
       ),
     );
