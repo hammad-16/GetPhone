@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:oru/providers/brand_provider.dart';
+import 'package:oru/widgets/faq_section.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/banner_provider.dart';
 import '../providers/product_provider.dart';
 import '../utils/routes.dart';
 import '../widgets/buildCategoryButton.dart';
 import '../widgets/buildIconButton.dart';
+import '../widgets/build_banner.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -19,6 +22,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
 
+
+
   bool _isBottomNavVisible = true;
   @override
   void initState() {
@@ -30,13 +35,21 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() => _isBottomNavVisible = true);
       }
     });
+    //Starting the timer for automatic banner change
+    final bannerProvider = Provider.of<BannerProvider>(context, listen: false);
+    bannerProvider.startTimer();
+  }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
+
 
     // Fetch products on initial load
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -57,19 +70,20 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return true;
         },
+
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
             // Sliver App Bar with Search Bar
             SliverAppBar(
               title: Row(
-                children:[
-                  IconButton(onPressed: (){}, icon: Icon(Icons.menu)),
-                  SizedBox(
-                  height: 80,
-                    width: 80,
-                    child: Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0cBwtJxQ14kN_z1ua49yRZyt2qFzu4_vx8A&s")),
-             ]
+                  children:[
+                    IconButton(onPressed: (){}, icon: const Icon(Icons.menu)),
+                    SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0cBwtJxQ14kN_z1ua49yRZyt2qFzu4_vx8A&s")),
+                  ]
               ),
               floating: true,
               pinned: true,
@@ -78,12 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextButton(
                   onPressed: () {
                     Provider.of<AuthProvider>(context, listen: false).logout();
-                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    Navigator.pushNamed(context, AppRoutes.preLogin);
                   },
-                  child: const Text("Login"),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.yellow),
                   ),
+                  child: const Text("Login"),
                 ),
               ],
               bottom: AppBar(
@@ -94,26 +108,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Center(
                     child: TextField(
                       decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1.0
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.0
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(14))
+                          ) ,
+                          contentPadding: EdgeInsets.only(top: 1),
+                          hintStyle: TextStyle(
+                              fontSize: 14
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(14))
-                        ) ,
-                        contentPadding: EdgeInsets.only(top: 1),
-                        hintStyle: TextStyle(
-                          fontSize: 14
-                        ),
-                        hintText: 'Search phones with make,model.....',
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.search),
-                        suffixIcon: Icon(Icons.mic)
+                          hintText: 'Search phones with make,model.....',
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search),
+                          suffixIcon: Icon(Icons.mic)
                       ),
                     ),
                   ),
                 ),
               ),
             ),
+
             SliverToBoxAdapter(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -134,6 +149,50 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
+              child: Consumer<BannerProvider>(
+                builder: (context, bannerProvider, child) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 150,
+                        child: PageView(
+                          controller: bannerProvider.pageController,
+                          onPageChanged: (int page) {
+                            bannerProvider.updatePage(page);
+                          },
+                          children: [
+                            buildBannerCard('assets/images/BannerA.png'),
+                            buildBannerCard('assets/images/BannerB.png'),
+                            buildBannerCard('assets/images/BannerC.png'),
+                            buildBannerCard('assets/images/BannerD.png'),
+                            buildBannerCard('assets/images/BannerE.png'),
+                          ],
+                        ),
+                      ),
+                      // Add page indicators
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          5,
+                              (index) => Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: bannerProvider.currentPage == index
+                                  ? Colors.blue
+                                  : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            SliverToBoxAdapter(
               child: Consumer<BrandProvider>(
                 builder: (context, brandProvider, child) {
                   if (brandProvider.isLoading) {
@@ -141,8 +200,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   return Container(
-                    height: 80, // Adjust height as needed
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    height: 80,
+                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: brandProvider.brands.map((brand) {
@@ -174,12 +233,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 childCount: combinedProducts.length + (productProvider.isLoading ? 1 : 0),
               ),
             ),
+
+    SliverToBoxAdapter(
+    child: SizedBox(
+      height: 70,
+      child: TextButton(
+      onPressed: () {},
+      child: const Row(
+      children: [
+      Expanded(
+      child: Text(
+      "Frequently Asked Question",
+      style: TextStyle(
+        fontSize: 19,
+      fontWeight: FontWeight.w400,
+      color: Colors.black, // Set text color to black
+      ),
+      ),
+      ),
+      Icon(
+      Icons.arrow_forward_ios, // Add a suffix icon
+      color: Colors.black, // Set icon color to black
+      size: 16, // Adjust icon size
+      ),
+      ],
+      ),
+      ),
+    ),
+    ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: FAQScreen(),
+              ),
+            ),
+
+
           ],
         ),
       ),
 
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: _isBottomNavVisible? BottomNavigationBar(
+        backgroundColor: Colors.white,
         type:  BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -199,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Profile',
           ),
         ],
-      ),
+      ):null
     );
   }
 

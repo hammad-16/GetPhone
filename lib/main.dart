@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:oru/providers/banner_provider.dart';
 import 'package:oru/providers/brand_provider.dart';
 import 'package:oru/providers/product_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,16 +22,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(
-          create: (_) => ProductProvider(),
-        ),
-        ChangeNotifierProvider(create: (_) => BrandProvider())
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => BrandProvider()),
+        ChangeNotifierProvider(create: (_)=> BannerProvider()..startTimer()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ORUphones',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             color: Colors.white
           ),
           primarySwatch: Colors.red,

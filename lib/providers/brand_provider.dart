@@ -23,6 +23,7 @@ class BrandProvider extends ChangeNotifier{
     notifyListeners();
     
     try {
+
       final response = await http.get(
         Uri.parse("http://40.90.224.241:5000/makeWithImages")
       );

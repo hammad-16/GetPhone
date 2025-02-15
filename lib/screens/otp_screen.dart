@@ -47,11 +47,17 @@ class _OTPScreenState extends State<OTPScreen> {
 
                 if (success) {
                   if (authProvider.status == AuthStatus.newUser) {
+                    if(!context.mounted) {
+                      return;
+                    }
                     Navigator.pushReplacementNamed(
                         context,
                         AppRoutes.confirmName
                     );
                   } else {
+                    if(!context.mounted) {
+                      return;
+                    }
                     Navigator.pushReplacementNamed(
                         context,
                         AppRoutes.home
