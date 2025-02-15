@@ -29,24 +29,27 @@ class _LoginScreenState extends State<LoginScreen> {
     return ChangeNotifierProvider(
       create: (_) => CheckboxProvider(),
       child: Scaffold(
-          appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Row(
-                children: [
-                  const SizedBox(width: 280),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close)
-                  ),
-                ],
-              )
+        resizeToAvoidBottomInset: true, // Ensures content adjusts when keyboard appears
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Row(
+            children: [
+              const SizedBox(width: 280),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close),
+              ),
+            ],
           ),
-          body: Column(
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left:105),
                 child: Image.network(
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0cBwtJxQ14kN_z1ua49yRZyt2qFzu4_vx8A&s",
                   width: 140,
@@ -54,18 +57,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
               Padding(
-                padding: const EdgeInsets.only(left: 32),
+                padding: const EdgeInsets.only(left: 95),
                 child: Text(
                   "Welcome",
                   style: TextStyle(
-                      fontSize: 40,
-                      color: Colors.blue[700],
-                      fontWeight: FontWeight.bold
+                    fontSize: 40,
+                    color: Colors.blue[700],
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(left: 22),
+                padding: EdgeInsets.only(left: 108),
                 child: Text(
                   "Sign in to continue",
                   style: TextStyle(fontSize: 16),
@@ -103,9 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const Text('Accept '),
                     GestureDetector(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: const Text(
                         'Terms and condition',
                         style: TextStyle(
@@ -120,64 +121,60 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Consumer<CheckboxProvider>(
-                  builder: (context, provider, child){
+                  builder: (context, provider, child) {
                     final authProvider = Provider.of<AuthProvider>(context, listen: false);
                     return SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: provider.isChecked ? () async {
-                        final phoneNumber = _phoneController.text.trim();
-                        if(phoneNumber.isNotEmpty)
-                          {
-                            try{
-                             final check = await authProvider.createOtp(phoneNumber);
-                            if(check)
-                              {
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: provider.isChecked
+                            ? () async {
+                          final phoneNumber = _phoneController.text.trim();
+                          if (phoneNumber.isNotEmpty) {
+                            try {
+                              final check = await authProvider.createOtp(phoneNumber);
+                              if (check) {
                                 Navigator.pushReplacementNamed(context, AppRoutes.otp);
                               }
-
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error: $e')),
+                              );
                             }
-                            catch(e)
-                        {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Error: $e'))
-                          );
-
-                        }
                           }
-
-                      } : (){},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3F51B5),
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                        }
+                            : () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF3F51B5),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Next',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-  }
+                    );
+                  },
                 ),
               ),
             ],
-          )
+          ),
+        ),
       ),
     );
   }

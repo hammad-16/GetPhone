@@ -39,7 +39,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 width: 140,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(bottom: 20),
               child: Text(
@@ -51,12 +51,12 @@ class _OTPScreenState extends State<OTPScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Text(
+            const Text(
               textAlign: TextAlign.center,
               "Please enter the 4 digital verification code sent to your mobile number ",
               style: TextStyle(fontSize: 16),
             ),
-            Padding(padding: EdgeInsets.only(top: 10), child: OtpText()),
+            Padding(padding: const EdgeInsets.only(top: 10), child: OtpText()),
 
             ElevatedButton(
               onPressed: () async {

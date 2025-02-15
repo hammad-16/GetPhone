@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             // Sliver App Bar with Search Bar
             SliverAppBar(
+              automaticallyImplyLeading: false,
               title: Row(
                   children:[
                     IconButton(onPressed: (){}, icon: const Icon(Icons.menu)),
@@ -102,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
               bottom: AppBar(
+                automaticallyImplyLeading: false,
                 title: Container(
                   width: double.infinity,
                   height: 40,
