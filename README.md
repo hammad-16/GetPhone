@@ -2,7 +2,7 @@
 
 <h2>📱 Overview </h2>
 
-**This is a functional implementation of the ORU Phones project, developed using Flutter. The application showcases a sleek and intuitive UI, seamlessly integrating various APIs for a smooth and efficient user experience. Designed with performance and usability in mind, this project demonstrates robust state management and automated banner handling with dynamic scrolling.**
+**This is a functional implementation of the GetPhone project, developed using Flutter. The application showcases a sleek and intuitive UI, seamlessly integrating various APIs for a smooth and efficient user experience. Designed with performance and usability in mind, this project demonstrates robust state management and automated banner handling with dynamic scrolling.**
 
 <h2>✨ Features</h2>
 
