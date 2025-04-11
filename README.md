@@ -1,4 +1,4 @@
-# ORU Phones - A Flutter Implementation
+# GetPhone - A Flutter Implementation
 
 <h2>📱 Overview </h2>
 
